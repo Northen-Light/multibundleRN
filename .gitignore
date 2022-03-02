@@ -58,5 +58,5 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
-*.Gemfile
-*.Gemfile.lock
+Gemfile
+Gemfile.lock
