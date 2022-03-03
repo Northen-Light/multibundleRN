@@ -5,7 +5,8 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": "react-native start --port=8081",
+    "android-dev": "adb reverse tcp:8086 tcp:8086 && npm run start",
     "test": "jest",
     "lint": "eslint ."
   },
@@ -21,7 +22,8 @@
     "eslint": "^8.9.0",
     "jest": "^27.5.1",
     "metro-react-native-babel-preset": "^0.68.0",
-    "react-test-renderer": "17.0.2"
+    "react-test-renderer": "17.0.2",
+    "line-reader": "^0.4.0"
   },
   "jest": {
     "preset": "react-native"

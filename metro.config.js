@@ -1,10 +1,4 @@
-/**
- * Metro configuration for React Native
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
+const modulePathHashFunction = require('./moduleHashFunction')
 module.exports = {
   transformer: {
     getTransformOptions: async () => ({
@@ -14,4 +8,11 @@ module.exports = {
       },
     }),
   },
+  serializer: {
+    createModuleIdFactory: function () {
+      return function (path) {
+        return modulePathHashFunction(path)
+      }
+    }
+  }
 };
