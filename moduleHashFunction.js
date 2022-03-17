@@ -15,11 +15,3 @@ module.exports = function (path) {
   }
   return hash;
 }
-// 000001 - 1
-// 1 << 5
-// 100000 - 32
-
-
-//abc
-// hash - 97
-// 97 << 5 - 97 +

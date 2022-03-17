@@ -1,12 +1,17 @@
 const {exec} = require('child_process');
 const lineReader = require('line-reader');
 
-const BASE_BUNDLE = 'android/app/src/main/assets/index.android-plain.bundle.js';
+const BASE_BUNDLE = 'android/app/src/main/assets/index.android-plain.bundle';
 const HOME_BUNDLE = 'android/app/src/main/assets/home.bundle';
 
 function getCommand(entryFile = 'index.js', output = BASE_BUNDLE) {
-  return `NODE_ENV=production react-native bundle --platform android --dev false --entry-file ${entryFile} --bundle-output ${output} --reset-cache 2>&1`;
+  // if (entryFile === "index.js")
+    return `NODE_ENV=production react-native bundle --platform android --dev false --entry-file ${entryFile} --bundle-output ${output} --reset-cache 2>&1`;
+  // else
+  //   return `NODE_ENV=production react-native bundle --platform android --dev false --entry-file ${entryFile} --bundle-output ${output}`;
 }
+
+let prevTime = null;
 
 
 function runBundle({entry, output}) {
@@ -73,7 +78,6 @@ function removeBaseCode(outputPath, base = BASE_BUNDLE) {
         writeStream.write(value.code + "\n");
       }
     })
-    //commandLine '../../node_modules/hermes-engine/osx-bin/hermes', 'src/main/assets/async.js', '-emit-binary', '-out', 'src/main/assets/async.bundle'
     const bytecodeBundlePath = newPath.replace('-plain.bundle', '.bundle');
     exec(`node_modules/hermes-engine/osx-bin/hermesc ${newPath} -emit-binary -out ${bytecodeBundlePath}`, () => {
       resolve();
@@ -92,19 +96,19 @@ function buildBundle({entry, output}) {
 function generateByteCode() {
   return new Promise((resolve) => {
     const out = BASE_BUNDLE.replace('-plain.bundle', '.bundle');
-    console.log('out', out);
     exec(`node_modules/hermes-engine/osx-bin/hermesc ${BASE_BUNDLE} -emit-binary -out ${out}`, {
       cwd: __dirname,
       maxBuffer: 10 * 1024 * 1024
     }, (err, stdout) => {
       console.log('stdout', stdout);
       console.log('err', err);
+      console.log("Finised building base bundle ", Date.now() - time)
       resolve();
     });
   })
 }
 
 buildBaseBundle()
-  .then(() => buildBundle({entry: 'pages/home/index.js', output: HOME_BUNDLE}))
+  .then(() => buildBundle({entry: 'pages/Home/index.js', output: HOME_BUNDLE}))
   .then(() => generateByteCode())
 

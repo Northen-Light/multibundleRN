@@ -1,20 +1,35 @@
 import * as React from 'react';
-import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, Button, StyleSheet, Text, View} from 'react-native';
 import importLazy from "./importLazyPolyfill";
 
 
 export default function App() {
   const [Home, setHomeMod] = React.useState(null);
-  React.useEffect(() => {
+  const [loading, setLoading] = React.useState(false);
+
+  const loadOnDemand = () => {
+    setLoading(true);
     importLazy("pages/home/index.js").then(module => {
-      setHomeMod(() => module.default)
+      setHomeMod(() => module.default);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
     });
-  }, []);
+  }
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size={'large'}/>
+        <Text>Loading chunk</Text>
+      </View>
+    );
+  }
   if (Home == null) {
-    return <View>
-      <ActivityIndicator size={50}/>
-      <Text>Loading chunk</Text>
-    </View>
+    return (
+      <View style={styles.container}>
+        <Button title={"Fetch bundle"} onPress={loadOnDemand} color="#841584"/>
+      </View>
+    );
   }
   return (
     <View style={styles.container}>

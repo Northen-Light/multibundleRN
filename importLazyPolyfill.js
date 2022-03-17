@@ -7,14 +7,3 @@ export default async function importLazy(modulePath) {
   await NativeModules.ChunkLoader.loadChunk(moduleId);
   return global.__r(moduleId);
 }
-// plain bundle + chunk
-
-// plain
-
-
-
-// chunk
-
-
-
-
